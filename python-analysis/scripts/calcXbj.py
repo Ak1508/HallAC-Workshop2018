@@ -9,7 +9,7 @@ import ROOT as R
 dd = pickle.load(open('../ddicts/dataDictQNY.pkl', 'rb'))
 
 # Open the ROOT file created via makeHistos.py
-rof = R.TFile('../data/shms.root', 'read')
+rof = R.TFile('../data/full-shms.root', 'read')
 
 # Convert histos in numpy arrays for easier manipulation
 for tar, tar_dict in dd.items():
@@ -51,52 +51,52 @@ for tar, tar_dict in dd.items():
     dd[tar]['eprime_ry_err']  = np.sqrt(eprime_ry_list)
     dd[tar]['eprime_qny_err'] = np.sqrt(eprime_ry_list)*(1. / dd[tar]['ecq'][index])
 
-# Truncate all non-zero ratios for plotting
-for tar, tar_dict in dd.items():
-    # Initialize lists
-    eprime_nz_val_list = []
-    eprime_nz_ry_list = []
-    eprime_nz_qny_list = []
-    eprime_nz_ry_err_list = []
-    eprime_nz_qny_err_list = []
-    for index, mom_list in enumerate(dd[tar]['pcent_list']):
-        # Truncate all non-zero qnys for plotting
-        eprime_nz_val_list.append(dd[tar]['eprime_val'][index][dd[tar]['eprime_qny'][index]>0.0])
-        eprime_nz_ry_list.append(dd[tar]['eprime_ry'][index][dd[tar]['eprime_ry'][index]>0.0])
-        eprime_nz_qny_list.append(dd[tar]['eprime_qny'][index][dd[tar]['eprime_qny'][index]>0.0])
-        eprime_nz_ry_err_list.append(dd[tar]['eprime_ry_err'][index][dd[tar]['eprime_ry'][index]>0.0])
-        eprime_nz_qny_err_list.append(dd[tar]['eprime_qny_err'][index][dd[tar]['eprime_qny'][index]>0.0])
-    # Overwrite previous E' arrays with truncated arrays
-    dd[tar]['eprime_val']     = eprime_nz_val_list
-    dd[tar]['eprime_ry']      = eprime_nz_ry_list
-    dd[tar]['eprime_qny']     = eprime_nz_qny_list
-    dd[tar]['eprime_ry_err']  = eprime_nz_ry_err_list
-    dd[tar]['eprime_qny_err'] = eprime_nz_qny_err_list
+# # Truncate all non-zero ratios for plotting
+# for tar, tar_dict in dd.items():
+#     # Initialize lists
+#     eprime_nz_val_list = []
+#     eprime_nz_ry_list = []
+#     eprime_nz_qny_list = []
+#     eprime_nz_ry_err_list = []
+#     eprime_nz_qny_err_list = []
+#     for index, mom_list in enumerate(dd[tar]['pcent_list']):
+#         # Truncate all non-zero qnys for plotting
+#         eprime_nz_val_list.append(dd[tar]['eprime_val'][index][dd[tar]['eprime_qny'][index]>0.0])
+#         eprime_nz_ry_list.append(dd[tar]['eprime_ry'][index][dd[tar]['eprime_ry'][index]>0.0])
+#         eprime_nz_qny_list.append(dd[tar]['eprime_qny'][index][dd[tar]['eprime_qny'][index]>0.0])
+#         eprime_nz_ry_err_list.append(dd[tar]['eprime_ry_err'][index][dd[tar]['eprime_ry'][index]>0.0])
+#         eprime_nz_qny_err_list.append(dd[tar]['eprime_qny_err'][index][dd[tar]['eprime_qny'][index]>0.0])
+#     # Overwrite previous E' arrays with truncated arrays
+#     dd[tar]['eprime_val']     = eprime_nz_val_list
+#     dd[tar]['eprime_ry']      = eprime_nz_ry_list
+#     dd[tar]['eprime_qny']     = eprime_nz_qny_list
+#     dd[tar]['eprime_ry_err']  = eprime_nz_ry_err_list
+#     dd[tar]['eprime_qny_err'] = eprime_nz_qny_err_list
     
-# Define function to calculate xbj from bins in E'
-mp = 0.93827231 # (GeV) mass of proton
-def calc_xbj(ep, eb, theta) :
-    return ((eb*ep*(1.0 - np.cos(np.deg2rad(theta))))/(mp*(eb - ep)))
+# # Define function to calculate xbj from bins in E'
+# mp = 0.93827231 # (GeV) mass of proton
+# def calc_xbj(ep, eb, theta) :
+#     return ((eb*ep*(1.0 - np.cos(np.deg2rad(theta))))/(mp*(eb - ep)))
 
-# Calculate xbj from E' and store in dictionary
-for tar, tar_dict in dd.items():
-    xbj_calc_nz_val_list = []
-    xbj_calc_nz_ry_list = []
-    xbj_calc_nz_qny_list = []
-    xbj_calc_nz_ry_err_list = []
-    xbj_calc_nz_qny_err_list = []
-    for index, mom_list in enumerate(dd[tar]['pcent_list']):
-        xbj_calc_nz_val_list.append(calc_xbj(dd[tar]['eprime_val'][index], dd[tar]['ebeam'][index], dd[tar]['theta'][index]))
-        xbj_calc_nz_ry_list.append(dd[tar]['eprime_ry'][index])
-        xbj_calc_nz_qny_list.append(dd[tar]['eprime_qny'][index])
-        xbj_calc_nz_ry_err_list.append(dd[tar]['eprime_ry_err'][index])
-        xbj_calc_nz_qny_err_list.append(dd[tar]['eprime_qny_err'][index])
-    # Overwrite previous xbj arrays with truncated arrays
-    dd[tar]['xbj_calc_val']     = xbj_calc_nz_val_list
-    dd[tar]['xbj_calc_ry']      = xbj_calc_nz_ry_list
-    dd[tar]['xbj_calc_qny']     = xbj_calc_nz_qny_list
-    dd[tar]['xbj_calc_ry_err']  = xbj_calc_nz_ry_err_list
-    dd[tar]['xbj_calc_qny_err'] = xbj_calc_nz_qny_err_list
+# # Calculate xbj from E' and store in dictionary
+# for tar, tar_dict in dd.items():
+#     xbj_calc_nz_val_list = []
+#     xbj_calc_nz_ry_list = []
+#     xbj_calc_nz_qny_list = []
+#     xbj_calc_nz_ry_err_list = []
+#     xbj_calc_nz_qny_err_list = []
+#     for index, mom_list in enumerate(dd[tar]['pcent_list']):
+#         xbj_calc_nz_val_list.append(calc_xbj(dd[tar]['eprime_val'][index], dd[tar]['ebeam'][index], dd[tar]['theta'][index]))
+#         xbj_calc_nz_ry_list.append(dd[tar]['eprime_ry'][index])
+#         xbj_calc_nz_qny_list.append(dd[tar]['eprime_qny'][index])
+#         xbj_calc_nz_ry_err_list.append(dd[tar]['eprime_ry_err'][index])
+#         xbj_calc_nz_qny_err_list.append(dd[tar]['eprime_qny_err'][index])
+#     # Overwrite previous xbj arrays with truncated arrays
+#     dd[tar]['xbj_calc_val']     = xbj_calc_nz_val_list
+#     dd[tar]['xbj_calc_ry']      = xbj_calc_nz_ry_list
+#     dd[tar]['xbj_calc_qny']     = xbj_calc_nz_qny_list
+#     dd[tar]['xbj_calc_ry_err']  = xbj_calc_nz_ry_err_list
+#     dd[tar]['xbj_calc_qny_err'] = xbj_calc_nz_qny_err_list
 
-# Save the dictionary with calculated xbj values into a pickle file
-pickle.dump(dd, open('../ddicts/dataDictXbj.pkl', 'wb'))
+# # Save the dictionary with calculated xbj values into a pickle file
+# pickle.dump(dd, open('../ddicts/dataDictXbj.pkl', 'wb'))
