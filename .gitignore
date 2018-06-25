@@ -2,6 +2,9 @@
 data
 rootfiles
 
+# ROOT data files
+*.root
+
 # Scratch files
 *.txt
 *.log
@@ -44,6 +47,7 @@ rootfiles
 
 # Pythonic files
 *.pkl
+.ipynb_checkpoints
 
 # Images
 *.png
