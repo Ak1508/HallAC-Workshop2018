@@ -26,8 +26,8 @@ for index, run in enumerate(rf):
             # Kinematic configurations
             if ('Run Num'  in data[0]) : rfd['rn'].append(data[1].strip())
             # Charge and current
-            if ('BCM4a Beam Cut Current' in data[0]) : rfd['i4a'].append(filter(lambda x: x in string.digits + '.', data[1]))
-            if ('BCM4b Beam Cut Current' in data[0]) : rfd['i4b'].append(filter(lambda x: x in string.digits + '.', data[1]))
+            if ('BCM4a Beam Cut Current' in data[0]) : rfd['i4a'].append(''.join(list(filter(lambda x: x in string.digits + '.', data[1]))))
+            if ('BCM4b Beam Cut Current' in data[0]) : rfd['i4b'].append(''.join(list(filter(lambda x: x in string.digits + '.', data[1]))))
             # Live times (must be multiplied by 0.01 -> done later)
             if ('Pre-Scaled Ps2 SHMS Computer Live Time' in data[0]) : rfd['clt'].append(data[1][:8].strip())
             # Tracking efficiencies
@@ -37,7 +37,7 @@ for index, run in enumerate(rf):
             # EL-REAL trigger rate
             if ('pTRIG2' in data[0]) : 
                pt2b = data[1][data[1].find('[')+1:data[1].find(']')]
-               rfd['pt2r'].append(filter(lambda x: x in string.digits + '.', pt2b))
+               rfd['pt2r'].append(''.join(list(filter(lambda x: x in string.digits + '.', pt2b))))
             psdata = data[0].split('=')
             if ('Ps2_factor' in psdata[0]) : rfd['psf'].append(psdata[1].strip())
             
