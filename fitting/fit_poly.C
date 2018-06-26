@@ -31,13 +31,22 @@ using namespace std;
 
 void fit_poly() {
  const static Int_t npar=3;
- const static Int_t nfit_max=1000;
- const static Int_t nv_max=2000;
+ const static Int_t nfit_max=10000;
+ const static Int_t nv_max=10000;
   TVectorD B(npar);
   TMatrixD lambda(npar,nfit_max);
   TMatrixD C(npar,npar);
+  TMatrixD V(npar,npar);
+  TMatrixD U(npar,npar);
+  TVectorD S(npar);
+  TMatrixD Cnew(npar,npar);
+  Double_t v_xval[nfit_max];
+  Double_t v_yval[nfit_max];
 
   TF1 *fpoly = new TF1("fpoly","[0]+[1]*x+[2]*x*x",0,10);
+  TF1 *fpoly2 = new TF1("fpoly2","[0]+[1]*x+[2]*x*x",0,10);
+
+  TH2F *hpoly = new TH2F("hpoly"," ;Y;X",100,0,10,100,0,500);
 
   fpoly->SetParameters(3,5,7);
   TRandom *r3 = new TRandom3();
@@ -45,16 +54,22 @@ void fit_poly() {
   Int_t nfit=0;
   for( Int_t nv=0; nv<nv_max; nv++ ){
     Double_t xval = r3->Uniform(0.,10.);
-    Double_t yval = r2->Gaus(fpoly->Eval(xval),1.);
-             if ( xval > 0 && xval < 5. && nfit < nfit_max) {
+    Double_t yval = fpoly->Eval(xval) + 2.*r2->Gaus(0.,1.);
+             if ( xval > 0 && xval < 10.1 && nfit < nfit_max) {
+                 hpoly->Fill(xval,yval);
                  for( Int_t icoeff_fit=0; icoeff_fit<npar; icoeff_fit++ ){
 		      Double_t etemp= pow( xval, icoeff_fit); 
                       lambda[icoeff_fit][nfit] = etemp;
 	              B[icoeff_fit] += (yval) * etemp;
  	             } // for icoeff_fit loop
+		 v_xval[nfit] = xval;
+		 v_yval[nfit] = yval;
 	          nfit++;
 	     }
   }
+  //
+  hpoly->Draw();
+  hpoly->Fit("fpoly");
   //
 for(Int_t i=0; i<npar; i++){
     for(Int_t j=0; j<npar; j++){
@@ -75,6 +90,19 @@ for(Int_t i=0; i<npar; i++){
   ok = Ay_svd.Solve( B );
   // After Solve the B matrix has the coefficents
   cout << "solution ok = " << ok << endl;
+  cout << " solution" << endl;
   B.Print();
+  U=Ay_svd.GetU();
+  //cout << " U matrix" << endl;
+  //U.Print();
+  V=Ay_svd.GetV();
+  //cout << " V matrix " << endl;
+  //V.Print();
+  S=Ay_svd.GetSig();
+  //cout << " S matrix " << endl;
+  // S.Print();
+  fpoly2->SetParameters(B(0),B(1),B(2));
+  fpoly2->Draw("same");
+  fpoly2->SetLineColor(4);
   //
 }
