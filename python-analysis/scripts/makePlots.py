@@ -12,7 +12,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 rc('text', usetex = True)
 rc('font', family = 'serif')
 mpl.rcParams.update({'font.size': 18})
-mpl.rcParams.update({'errorbar.capsize': 10})
+mpl.rcParams.update({'errorbar.capsize': 6})
 
 # Open data dictionary produced via makeDataDict.py
 dd = pickle.load(open('../ddicts/dataDictXbj.pkl', 'rb'))
@@ -67,21 +67,21 @@ plt.savefig('../plots/c12-qny-simple.png')
 #                        label = str(dd[tar]['pcent_list'][index]) + ' GeV', 
 #                        markersize = 9, alpha = 0.75)
 #            ax.set_ylim(0.0, np.amax(dd[tar]['xbj_calc_qny'][0]) + 
-#                        np.amax(dd[tar]['xbj_calc_qny'][0])*5.0)
-#            ax.set_yscale('log')
+#                        np.amax(dd[tar]['xbj_calc_qny'][0])*0.10)
+#            #ax.set_yscale('log')
 #            ax.set_xlabel(r'$\mathrm{x_{Bj}}$')
 #            ax.text(0.1, 0.2, r'${}^{9}\mathrm{{Be}}$', ha = 'center', va = 'center', 
 #                    transform = ax.transAxes, fontdict = tarfont)
 #            ax.legend(loc = 'best', numpoints = 1, fancybox = True)
 # plt.savefig('../plots/multi-tar-qny-xbj.png')
 
-# =:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
+# # =:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=
 
 # # Open data frame produced via makeDataFrame.py
 # df = pickle.load(open('../dframes/dataFrame.pkl', 'rb'))
 # # Plot variables in data frame
 # mkrs = ['bd', 'gs', 'ko', 'r*']
-# fig, ax = plt.subplots(ncols = 2, figsize  = (20, 10)) 
+# fig, ax = plt.subplots(ncols = 2, figsize  = (15, 8))
 # # Unpack the axs array into its individual components
 # ax0, ax1 = ax.flatten()
 # # Plot trigger rate vs computer live time
